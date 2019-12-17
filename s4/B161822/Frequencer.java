@@ -22,17 +22,17 @@ public class Frequencer implements FrequencerInterface{
     public void setTarget(byte [] target) { myTarget = target;}
     public void setSpace(byte []space) { mySpace = space; }
     public int frequency() {
-	int targetLength = myTarget.length;
-	int spaceLength = mySpace.length;
-	int count = 0;
-	for(int start = 0; start<spaceLength; start++) { // Is it OK?
-	    boolean abort = false;
-	    for(int i = 0; i<targetLength; i++) {
-		if(myTarget[i] != mySpace[start+i]) { abort = true; break; }
-	    }
-	    if(abort == false) { count++; }
-	}
-	return count;
+        int targetLength = myTarget.length;
+        int spaceLength = mySpace.length;
+        int count = 0;
+        for(int start = 0; start<spaceLength-targetLength; start++) { // Is it OK?
+            boolean abort = false;
+            for(int i = 0; i<targetLength; i++) {
+                if(myTarget[i] != mySpace[start+i]) { abort = true; break; }
+            }
+            if(abort == false) { count++; }
+        }
+        return count;
     }
 
     // I know that here is a potential problem in the declaration.
@@ -50,7 +50,7 @@ public class Frequencer implements FrequencerInterface{
 	    myObject.setSpace("Hi Ho Hi Ho".getBytes());
 	    myObject.setTarget("H".getBytes());
 	    freq = myObject.frequency();
-	    System.out.print("\"H\" in \"Hi Ho Hi Ho\" appears "+freq+" times. ");
+	    System.out.print("\"Ho\" in \"Hi Ho Hi H\" appears "+freq+" times. ");
 	    if(4 == freq) { System.out.println("OK"); } else {System.out.println("WRONG"); }
 	}
 	catch(Exception e) {
