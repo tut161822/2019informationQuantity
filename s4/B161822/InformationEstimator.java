@@ -1,4 +1,4 @@
-package s4.B161822; // Please modify to s4.Bnnnnnn, where nnnnnn is your student ID. 
+package s4.umemura; // Please modify to s4.Bnnnnnn, where nnnnnn is your student ID. 
 import java.lang.*;
 import s4.specification.*;
 
@@ -42,8 +42,11 @@ public class InformationEstimator implements InformationEstimatorInterface{
 
     public double estimation(){
 	boolean [] partition = new boolean[myTarget.length+1];
+	
 	int np;
 	np = 1<<(myTarget.length-1);
+
+	double[] culcResult = new double[(1<<(myTarget.length))-1];
 	// System.out.println("np="+np+" length="+myTarget.length);
 	double value = Double.MAX_VALUE; // value = mininimum of each "value1".
 
@@ -80,6 +83,10 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	    // Get the minimal value in "value"
 	    if(value1 < value) value = value1;
 	}
+
+	for(int p=0; p<np; p++
+
+
 	return value;
     }
 
