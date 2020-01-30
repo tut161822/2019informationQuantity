@@ -180,7 +180,7 @@ public class Frequencer implements FrequencerInterface{
         //
         // ここに比較のコードを書け
         //
-        if(mySpace.length - i < k-j+1)return -1;
+	if(mySpace.length - suffixArray[i] < k-j)return -1;
         for(int a = 0; a < k-j; a++){
             if(mySpace[suffixArray[i]+a]>myTarget[j+a]){
                 return 1;
@@ -221,7 +221,10 @@ public class Frequencer implements FrequencerInterface{
         
         
         for(int i = 0; i < suffixArray.length; i++){
-            if(targetCompare(i,start,end) >= 0)return i;
+            if(targetCompare(i,start,end) >= 0){
+		//System.out.println("start index="+i);
+		return i;
+	    }
         }
         return suffixArray.length; //このコードは変更しなければならない。
     }
@@ -253,7 +256,10 @@ public class Frequencer implements FrequencerInterface{
         //
         
         for(int i = 0; i < suffixArray.length; i++){
-            if(targetCompare(i,start,end) == 1)return i;
+            if(targetCompare(i,start,end) == 1){
+		//System.out.println("end index="+i);
+		return i;
+	    }
         }
         return suffixArray.length; // この行は変更しなければならない、
     }

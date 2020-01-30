@@ -1,4 +1,4 @@
-package s4.umemura; // Please modify to s4.Bnnnnnn, where nnnnnn is your student ID. 
+package s4.B161822; // Please modify to s4.Bnnnnnn, where nnnnnn is your student ID. 
 import java.lang.*;
 import s4.specification.*;
 
@@ -19,6 +19,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
     // Code to tet, *warning: This code condtains intentional problem*
     byte [] myTarget; // data to compute its information quantity
     byte [] mySpace;  // Sample space to compute the probability
+    double [] culcResult;
     FrequencerInterface myFrequencer;  // Object for counting frequency
 
     byte [] subBytes(byte [] x, int start, int end) {
@@ -34,22 +35,27 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	return  - Math.log10((double) freq / (double) mySpace.length)/ Math.log10((double) 2.0);
     }
 
-    public void setTarget(byte [] target) { myTarget = target;}
+    public void setTarget(byte [] target) { 
+	myTarget = target;
+	culcResult = new double[myTarget.length];
+	for(int i=0; i < culcResult.length; i++){
+	    culcResult[i] = -1;
+	}
+    }
     public void setSpace(byte []space) { 
 	myFrequencer = new Frequencer();
 	mySpace = space; myFrequencer.setSpace(space); 
     }
 
     public double estimation(){
+
 	boolean [] partition = new boolean[myTarget.length+1];
 	
 	int np;
 	np = 1<<(myTarget.length-1);
-
-	double[] culcResult = new double[(1<<(myTarget.length))-1];
 	// System.out.println("np="+np+" length="+myTarget.length);
+	/*
 	double value = Double.MAX_VALUE; // value = mininimum of each "value1".
-
 	for(int p=0; p<np; p++) { // There are 2^(n-1) kinds of partitions.
 	    // binary representation of p forms partition.
 	    // for partition {"ab" "cde" "fg"}
@@ -63,6 +69,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
 
 	    // Compute Information Quantity for the partition, in "value1"
 	    // value1 = IQ(#"ab")+IQ(#"cde")+IQ(#"fg") for the above example
+
             double value1 = (double) 0.0;
 	    int end = 0;;
 	    int start = end;
@@ -82,19 +89,38 @@ public class InformationEstimator implements InformationEstimatorInterface{
 
 	    // Get the minimal value in "value"
 	    if(value1 < value) value = value1;
+
+	}
+	*/
+	//DPcode
+	double value = Double.MAX_VALUE; 
+	if(culcResult[0] == -1){
+  	    myFrequencer.setTarget(subBytes(myTarget, 0, 1));
+	    culcResult[0] = iq(myFrequencer.frequency());
 	}
 
-	for(int p=0; p<np; p++
+        double value1 = (double)0.0;
 
+	for(int i=0; i<myTarget.length; i++){
 
+	    if(culcResult[i] == -1){
+		myFrequencer.setTarget(subBytes(myTarget, 0, i+1));
+		culcResult[i] = iq(myFrequencer.frequency());
+	    }
+
+	    myFrequencer.setTarget(subBytes(myTarget, i+1, myTarget.length));
+	    value1 = culcResult[i] + iq(myFrequencer.frequency());
+	    if(value1 < value) value = value1;
+	}
 	return value;
     }
 
     public static void main(String[] args) {
 	InformationEstimator myObject;
 	double value;
+	long starttime = System.currentTimeMillis();
 	myObject = new InformationEstimator();
-	myObject.setSpace("3210321001230123".getBytes());
+	myObject.setSpace("1231231231230123123012012".getBytes());
 	myObject.setTarget("0".getBytes());
 	value = myObject.estimation();
 	System.out.println(">0 "+value);
@@ -107,6 +133,8 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	myObject.setTarget("00".getBytes());
 	value = myObject.estimation();
 	System.out.println(">00 "+value);
+	long endtime = System.currentTimeMillis();
+	System.out.println("prosessing time ="+ (endtime-starttime));
     }
 }
 				  
