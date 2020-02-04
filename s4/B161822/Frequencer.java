@@ -71,26 +71,17 @@ public class Frequencer implements FrequencerInterface{
         
         while(true){
             
-            if(mySpace[i + k] < mySpace[j + k] && i + k < mySpace.length - 1 && j + k < mySpace.length - 1){
+            if(mySpace[i + k] < mySpace[j + k]){
                 return -1;
             }
-            else if(mySpace[j + k] < mySpace[i + k] && i + k < mySpace.length - 1 && j + k < mySpace.length - 1){
+            else if(mySpace[j + k] < mySpace[i + k]){
                 return 1;
             }
-            
-            
-            else if(mySpace[i + k] <= mySpace[j + k] && i + k == mySpace.length - 1){
+            else if(i + k == mySpace.length - 1){
                 return -1;
             }
-            else if(mySpace[i + k] > mySpace[j + k] && i + k == mySpace.length - 1){
+            else if(j + k == mySpace.length - 1){
                 return 1;
-            }
-            
-            else if(mySpace[i + k] >= mySpace[j + k] && j + k == mySpace.length - 1){
-                return 1;
-            }
-            else if(mySpace[i + k] < mySpace[j + k] && j + k == mySpace.length - 1){
-                return -1;
             }
             k++;
             
@@ -408,14 +399,14 @@ public class Frequencer implements FrequencerInterface{
             
             int result = frequencerObject.frequency();
             System.out.print("Freq = "+ result+" ");
-            if(1 == result) { System.out.println("OK"); } else {System.out.println("WRONG"); }
+            if(0 == result) { System.out.println("OK"); } else {System.out.println("WRONG"); }
             
             
             int start = frequencerObject.subByteStartIndex(0,1);
             int end = frequencerObject.subByteEndIndex(0,1);
             int result2 = end - start;
             System.out.print("subFreq = " + result2+ " ");
-            if(2 == result2) {System.out.println("OK");} else {System.out.println("WRONG");}
+            if(0 == result2) {System.out.println("OK");} else {System.out.println("WRONG");}
             
             
         }
