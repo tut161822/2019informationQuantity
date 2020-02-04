@@ -117,43 +117,49 @@ public class Frequencer implements FrequencerInterface{
     }
 
     private void q_sort(int x, int y) {
-	if(x < y){
-	    int pos = partition(x,y);
-	    q_sort(x,pos-1);
-	    q_sort(pos+1,y);
-	}
+        if(x < y){
+            int pos = partition(x,y);
+            q_sort(x,pos-1);
+            q_sort(pos+1,y);
+        }
     }
 
     private int partition(int x, int y) {
-	int l = x;
-	int r = y-1;
+        int l = x;
+        int r = y-1;
 
-	while(true){
-	    while(true){
-		if(suffixCompare(suffixArray[l],suffixArray[y])==-1){
-		    l++;
-		}else{
-		    break;
-		}
-	    }
-	    while(true){
-		if(suffixCompare(suffixArray[r],suffixArray[y])==1){
-		    r--;
-		}else{
-		    break;
-		}
-	    }
-	    if(l>=r){
-		break;
-	    }
-	    int temp = suffixArray[l];
-	    suffixArray[l] = suffixArray[r];
-	    suffixArray[r] = temp;
-	}
-	int temp = suffixArray[l];
-	suffixArray[l] = suffixArray[y];
-	suffixArray[y] = temp;
-	return l;
+        while(true){
+            while(true){
+                if(l>=suffixArray.length){
+                    break;
+                }
+                if(suffixCompare(suffixArray[l],suffixArray[y])==-1){
+                    l++;
+                }else{
+                    break;
+                }
+            }
+            while(true){
+                if(r<0){
+                    break;
+                }
+                if(suffixCompare(suffixArray[r],suffixArray[y])==1){
+                    r--;
+                }else{
+                    break;
+                }
+            }
+            if(l>=r){
+                break;
+            }
+            int temp = suffixArray[l];
+            suffixArray[l] = suffixArray[r];
+            suffixArray[r] = temp;
+        }
+        int temp = suffixArray[l];
+        suffixArray[l] = suffixArray[y];
+        suffixArray[y] = temp;
+        return l;
     }
     
     // Suffix Arrayを用いて、文字列の頻度を求めるコード
@@ -215,9 +221,9 @@ public class Frequencer implements FrequencerInterface{
         // ここに比較のコードを書け
         //
         for(int a = 0; a < k-j; a++){
-	    if((suffixArray[i]+a)>=mySpace.length){
-		return -1;
-	    }
+            if((suffixArray[i]+a)>=mySpace.length){
+                return -1;
+            }
             if(mySpace[suffixArray[i]+a]>myTarget[j+a]){
                 return 1;
             }else if(mySpace[suffixArray[i]+a]<myTarget[j+a]){
@@ -228,24 +234,22 @@ public class Frequencer implements FrequencerInterface{
     }
 
     private int b_search(int x, int y, int start, int end) {
-	int p = x+(y-x)/2;
-	int result = targetCompare(p,start,end);
-	System.out.println(result+":"+p);
-
-	if(result==0){
-	    return p;
-	}else if(result==-1){
-	    if(x>=y){
-	        return -1;
-	    }
-	    return b_search(p+1, y, start, end);	    
-	}
-	else{
-	    if(x>=y){
-	        return -1;
-	    }
-	    return b_search(x, p-1, start, end);
-	}
+        int p = x+(y-x)/2;
+        int result = targetCompare(p,start,end);
+        if(result==0){
+            return p;
+        }else if(result==-1){
+            if(x>=y){
+                return -1;
+            }
+            return b_search(p+1, y, start, end);
+        }
+        else{
+            if(x>=y){
+                return -1;
+            }
+            return b_search(x, p-1, start, end);
+        }
     }
     
     private int subByteStartIndex(int start, int end) {
@@ -284,25 +288,25 @@ public class Frequencer implements FrequencerInterface{
         }
 	*/
 	//二分探索
-	int index = b_search(0,suffixArray.length-1,start,end);
-	System.out.println("index ="+index);
-	if(index==-1){
-	    return index;
-	}
-	while(true){
-	    if(index<0){
-		index=0;
-		break;
-	    }
-	    if(targetCompare(index,start,end)==0){
-		index--;
-	    }else{
-		index++;
-		break;
-	    }
-	}
-	System.out.println("start index="+index);
-	return index;
+        int index = b_search(0,suffixArray.length-1,start,end);
+        if(index==-1){
+            //System.out.println("start index="+index);
+            return index;
+        }
+        while(true){
+            if(index<0){
+                index=0;
+                break;
+            }
+            if(targetCompare(index,start,end)==0){
+                index--;
+            }else{
+                index++;
+                break;
+            }
+        }
+        //System.out.println("start index="+index);
+        return index;
     }
     
     private int subByteEndIndex(int start, int end) {
@@ -339,25 +343,24 @@ public class Frequencer implements FrequencerInterface{
         }
 	*/
 	//二分探索
-	int index = b_search(0,suffixArray.length-1,start,end);
-	System.out.println("index ="+index);
-	if(index==-1){
-	    System.out.println("end index="+index);
-	    return index;
-	}
-	while(true){
-	    if(index>=suffixArray.length){
-		index=suffixArray.length;
-		break;
-	    }
-	    if(targetCompare(index,start,end)==0){
-		index++;
-	    }else{
-		break;
-	    }
-	}
-	System.out.println("end index="+index);
-	return index;
+        int index = b_search(0,suffixArray.length-1,start,end);
+        if(index==-1){
+            //System.out.println("end index="+index);
+            return index;
+        }
+        while(true){
+            if(index>=suffixArray.length){
+                index=suffixArray.length;
+                break;
+            }
+            if(targetCompare(index,start,end)==0){
+                index++;
+            }else{
+                break;
+            }
+        }
+        //System.out.println("end index="+index);
+        return index;
         // この行は変更しなければならない、
     }
     

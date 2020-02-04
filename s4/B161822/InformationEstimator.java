@@ -19,7 +19,6 @@ public class InformationEstimator implements InformationEstimatorInterface{
     // Code to tet, *warning: This code condtains intentional problem*
     byte [] myTarget; // data to compute its information quantity
     byte [] mySpace;  // Sample space to compute the probability
-    double [] culcResult;
     FrequencerInterface myFrequencer;  // Object for counting frequency
 
     byte [] subBytes(byte [] x, int start, int end) {
@@ -27,32 +26,33 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	// It is not implement in class library because internal structure of byte[] requires copy.
 	byte [] result = new byte[end - start];
 	for(int i = 0; i<end - start; i++) { result[i] = x[start + i]; };
-	return result;
+        return result;
     }
 
     // IQ: information quantity for a count,  -log2(count/sizeof(space))
     double iq(int freq) {
-	return  - Math.log10((double) freq / (double) mySpace.length)/ Math.log10((double) 2.0);
+        return  - Math.log10((double) freq / (double) mySpace.length)/ Math.log10((double) 2.0);
     }
 
     public void setTarget(byte [] target) { 
-	myTarget = target;
-	culcResult = new double[myTarget.length];
-	for(int i=0; i < culcResult.length; i++){
-	    culcResult[i] = -1;
-	}
+        myTarget = target;
+        //culcResult = new double[myTarget.length];
+        //for(int i=0; i < culcResult.length; i++){
+        //    culcResult[i] = -1;
+        //}
     }
+    
     public void setSpace(byte []space) { 
-	myFrequencer = new Frequencer();
-	mySpace = space; myFrequencer.setSpace(space); 
+        myFrequencer = new Frequencer();
+        mySpace = space; myFrequencer.setSpace(space);
     }
 
     public double estimation(){
 
-	boolean [] partition = new boolean[myTarget.length+1];
+        boolean [] partition = new boolean[myTarget.length+1];
 	
-	int np;
-	np = 1<<(myTarget.length-1);
+        int np;
+        np = 1<<(myTarget.length-1);
 	// System.out.println("np="+np+" length="+myTarget.length);
 	/*
 	double value = Double.MAX_VALUE; // value = mininimum of each "value1".
@@ -93,48 +93,41 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	}
 	*/
 	//DPcode
-	double value = Double.MAX_VALUE; 
-	if(culcResult[0] == -1){
-  	    myFrequencer.setTarget(subBytes(myTarget, 0, 1));
-	    culcResult[0] = iq(myFrequencer.frequency());
-	}
-
+    
+        double value = Double.MAX_VALUE;
         double value1 = (double)0.0;
 
-	for(int i=0; i<myTarget.length; i++){
-
-	    if(culcResult[i] == -1){
-		myFrequencer.setTarget(subBytes(myTarget, 0, i+1));
-		culcResult[i] = iq(myFrequencer.frequency());
-	    }
-
-	    myFrequencer.setTarget(subBytes(myTarget, i+1, myTarget.length));
-	    value1 = culcResult[i] + iq(myFrequencer.frequency());
-	    if(value1 < value) value = value1;
-	}
-	return value;
+        for(int i=0; i<myTarget.length; i++){
+            myFrequencer.setTarget(subBytes(myTarget, 0, i+1));
+            double culcResult = iq(myFrequencer.frequency());
+            myFrequencer.setTarget(subBytes(myTarget, i+1, myTarget.length));
+            value1 = culcResult + iq(myFrequencer.frequency());
+            if(value1 < value) value = value1;
+        }
+     
+        return value;
     }
 
     public static void main(String[] args) {
-	InformationEstimator myObject;
-	double value;
-	long starttime = System.currentTimeMillis();
-	myObject = new InformationEstimator();
-	myObject.setSpace("1231231231230123123012012".getBytes());
-	myObject.setTarget("0".getBytes());
-	value = myObject.estimation();
-	System.out.println(">0 "+value);
-	myObject.setTarget("01".getBytes());
-	value = myObject.estimation();
-	System.out.println(">01 "+value);
-	myObject.setTarget("0123".getBytes());
-	value = myObject.estimation();
-	System.out.println(">0123 "+value);
-	myObject.setTarget("00".getBytes());
-	value = myObject.estimation();
-	System.out.println(">00 "+value);
-	long endtime = System.currentTimeMillis();
-	System.out.println("prosessing time ="+ (endtime-starttime));
+        InformationEstimator myObject;
+        double value;
+        long starttime = System.currentTimeMillis();
+        myObject = new InformationEstimator();
+        myObject.setSpace("123123123123012312301201247398723jfweorgesrghesrgeortujweiotuo438u5o4witfjelsfjsleghwaoghaleghwaitawegjhnharghwargjahlrgnjaegnjagna".getBytes());
+        //myObject.setTarget("0".getBytes());
+        //value = myObject.estimation();
+        //System.out.println(">0 "+value);
+        //myObject.setTarget("01".getBytes());
+        //value = myObject.estimation();
+        //System.out.println(">01 "+value);
+        //myObject.setTarget("0123".getBytes());
+        //value = myObject.estimation();
+        //System.out.println(">0123 "+value);
+        myObject.setTarget("00gheigterahgeigejetehrjejjalej".getBytes());
+        value = myObject.estimation();
+        //System.out.println(">00gheigtera "+value);
+        long endtime = System.currentTimeMillis();
+        System.out.println("prosessing time ="+ (endtime-starttime));
     }
 }
 				  
