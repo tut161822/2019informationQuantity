@@ -136,7 +136,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
         value = myObject.estimation();
         //System.out.println(">00gheigtera "+value);
         long endtime = System.currentTimeMillis();
-        System.out.println("prosessing time ="+ (endtime-starttime));
+        //System.out.println("prosessing time ="+ (endtime-starttime));
     }
 }
 				  
